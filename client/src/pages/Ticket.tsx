@@ -1,8 +1,7 @@
-// Ticket.tsx
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import ThreeBackground from "../components/animations/ticket";
+import ThreeBackground from "../components/animations/Ticket";
 import Spinner from "../components/ui/Spinner";
 
 const getCookie = (name: string): string | undefined => {
