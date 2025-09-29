@@ -30,7 +30,7 @@ app.use(cookieParser())
 
 // 3) CORS с конкретным origin и credentials: true
 app.use(cors({
-  origin: [CLIENT_URL, ADMIN_URL],
+  origin: [CLIENT_URL, ADMIN_URL, 'https://sturdy-octo-happiness-seven.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
