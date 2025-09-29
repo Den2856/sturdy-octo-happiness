@@ -36,8 +36,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type','Authorization'],
 }))
 
-app.options('*', cors());
-
 app.use('/api/tmdb', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const response = await axios.get('http://www.omdbapi.com/', {
