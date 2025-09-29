@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-const ThreeBackground: React.FC = () => {
+const Ticket: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,4 +95,4 @@ const ThreeBackground: React.FC = () => {
   return <div ref={mountRef} className="absolute top-0 left-0 w-full h-full -z-10" />;
 };
 
-export default ThreeBackground;
+export default Ticket;
