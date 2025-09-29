@@ -31,13 +31,13 @@ export const createOrder = async (req: Request, res: Response) => {
     const selectedSeats = getCookie(req, "selectedSeats");
 
     if (!movieData) {
-      return res.status(400).json({ error: "Missing movieData cookie." });
+      res.status(400).json({ error: "Missing movieData cookie." });
     }
     if (!orderSummary) {
-      return res.status(400).json({ error: "Missing OrderSummary cookie." });
+      res.status(400).json({ error: "Missing OrderSummary cookie." });
     }
     if (!selectedSeats) {
-      return res.status(400).json({ error: "Missing selectedSeats cookie." });
+      res.status(400).json({ error: "Missing selectedSeats cookie." });
     }
 
     const orderData = {
@@ -52,54 +52,54 @@ export const createOrder = async (req: Request, res: Response) => {
     };
 
     if (!orderData.movieId) {
-      return res.status(400).json({ error: "Missing movieId in cookie data." });
+      res.status(400).json({ error: "Missing movieId in cookie data." });
     }
     if (!orderData.theaterId) {
-      return res.status(400).json({ error: "Missing theaterId in cookie data." });
+      res.status(400).json({ error: "Missing theaterId in cookie data." });
     }
     if (!orderData.title) {
-      return res.status(400).json({ error: "Missing title in cookie data." });
+      res.status(400).json({ error: "Missing title in cookie data." });
     }
     if (!orderData.selectedDate) {
-      return res.status(400).json({ error: "Missing selectedDate in cookie data." });
+      res.status(400).json({ error: "Missing selectedDate in cookie data." });
     }
     if (!orderData.seats || !Array.isArray(orderData.seats) || orderData.seats.length === 0) {
-      return res.status(400).json({ error: "Missing or invalid seats in cookie data." });
+      res.status(400).json({ error: "Missing or invalid seats in cookie data." });
     }
     if (!orderData.price) {
-      return res.status(400).json({ error: "Missing price in cookie data." });
+      res.status(400).json({ error: "Missing price in cookie data." });
     }
 
     if (!mongoose.Types.ObjectId.isValid(orderData.movieId)) {
       console.log("Invalid movieId:", orderData.movieId);
-      return res.status(400).json({ error: "Invalid movieId format." });
+      res.status(400).json({ error: "Invalid movieId format." });
     }
     if (!mongoose.Types.ObjectId.isValid(orderData.theaterId)) {
       console.log("Invalid theaterId:", orderData.theaterId);
-      return res.status(400).json({ error: "Invalid theaterId format." });
+      res.status(400).json({ error: "Invalid theaterId format." });
     }
 
     const { email, code } = req.body;
     if (!email) {
-      return res.status(400).json({ error: "Email is required in request body." });
+      res.status(400).json({ error: "Email is required in request body." });
     }
 
     if (!code) {
-      return res.status(400).json({ error: "Verification code is required." });
+      res.status(400).json({ error: "Verification code is required." });
     }
 
     const verificationResult = await verifyCode(email, code);
     if (!verificationResult.isValid) {
-      return res.status(400).json({ error: verificationResult.error });
+      res.status(400).json({ error: verificationResult.error });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ error: "User not found." });
+      res.status(400).json({ error: "User not found." });
     }
 
     const order = new Order({
-      userId: user._id,
+      userId: user!._id,
       movieId: new mongoose.Types.ObjectId(orderData.movieId),
       theaterId: new mongoose.Types.ObjectId(orderData.theaterId),
       title: orderData.title,
@@ -119,7 +119,7 @@ export const createOrder = async (req: Request, res: Response) => {
       'selectedSeats=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/'
     ]);
 
-    return res.status(201).json({
+    res.status(201).json({
       message: "Order created successfully!",
       order: {
         id: order._id,
@@ -133,12 +133,11 @@ export const createOrder = async (req: Request, res: Response) => {
   } catch (err) {
     console.error("Error creating order:", err);
     
-    // More specific error handling
     if (err instanceof mongoose.Error.ValidationError) {
-      return res.status(400).json({ error: "Validation error: " + err.message });
+      res.status(400).json({ error: "Validation error: " + err.message });
     }
     
-    return res.status(500).json({ error: "Failed to create order." });
+    res.status(500).json({ error: "Failed to create order." });
   }
 };
 
