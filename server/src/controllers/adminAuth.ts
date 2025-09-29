@@ -49,6 +49,7 @@ export const loginAdmin: RequestHandler = async (req, res, next) => {
   }
 };
 
+
 export const meAdmin: RequestHandler = async (req, res, next) => {
   try {
     const user = await User.findById((req as any).userId).lean();
